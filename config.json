@@ -1,0 +1,8 @@
+{
+    "Title" : "DBConfig",
+    "Server" : "35.201.252.120",
+    "Profile" : "nick",
+    "Pwd" : "123456",
+    "Logpath" : "/log_files",
+    "Newspath" : "/news_files"
+}
