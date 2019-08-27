@@ -76,11 +76,11 @@ class spider():
             subhtml = urllib.urlopen(suburl)
             subsoup = BeautifulSoup(subhtml, 'html.parser')
             pdate = a[17:25]                              # get publish date
-            layout = int(a[28:30])                        # get layout number
-            sheet = int(a[26:27])                         # get sheet number
+            layout = int(re.findall('-([0-9]+)',a)[0])    # get layout number
+            sheet = int(re.findall('([0-9]+)-',a)[0])     # get sheet number
             fsubj = subsoup.find('h1').get_text().strip() # get first subject
             ssubj = subsoup.find('h2').get_text().strip() # get second subject
-            news_name = a[0:-4]                           # get news file name
+            news_name = str(pdate) + '-' + str(layout) + '-' + str(sheet)   # get news file name
             content = ''                                  # get news content
             contents = subsoup.find_all('div', id = 'articleContent')
             for con in contents:
@@ -89,16 +89,17 @@ class spider():
 
             # save data to db
             values = [pdate, layout, sheet, fsubj, ssubj, news_name]
-            self.log.log_event(10, 'News' + news_name + ' is storing...')
+            self.log.log_event(10, 'News ' + news_name + ' is storing...')
             self.db.sql_insert('peopledaily', values)
-            self.log.log_event(10, 'News' + news_name + ' is stored into DB')
+            self.log.log_event(10, 'News ' + news_name + ' is stored into DB')
 
             # save news to floder
-            self.log.log_event(10, 'News' + news_name + ' is loading to ' + self.news_path_today + '/ ...')
+            self.log.log_event(10, 'News ' + news_name + ' is loading to ' + self.news_path_today + '/ ...')
             fhand = open(self.news_path_today + '/' + news_name + '.txt', 'w+')
             fhand.writelines(content)
             fhand.close()
-            self.log.log_event(10, 'News' + news_name + ' is loaded')
+            print('News ' + news_name + ' is loaded!')
+            self.log.log_event(10, 'News ' + news_name + ' is loaded')
 
         self.db.close()
         self.log.log_event(10, 'Crawling is completed successfully!')
