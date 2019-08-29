@@ -1,6 +1,6 @@
 {
     "Title" : "DBConfig",
-    "Server" : "35.201.252.120",
+    "Server" : "35.201.252.*",
     "Profile" : "nick",
     "Pwd" : "123456",
     "Logpath" : "/log_files",
